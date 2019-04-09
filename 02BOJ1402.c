@@ -1,7 +1,4 @@
 #include<stdio.h>
-#include<stdbool.h>
-
-bool chkcmp(int A, int B);
 
 int main()
 {
@@ -9,24 +6,10 @@ int main()
 		scanf("%d", &ts_sz);
 		for ( i = 0; i < ts_sz ; i++){
 				scanf("%d %d", &A, &B);
-				if( chkcpt(A, B) )
-				{
-						printf("yes");
-				} 
-				else
-				{
-						printf("no");
-				}
+		}
+		for (i = 0; i<ts_sz; i++){
+				printf("yes");
 		}
 		return 0;
 }
 
-bool chkcpt(int A, int B)
-{
-		int i;
-		for(i = 1; i < A; i++)
-		{
-				
-
-		return true;
-}
