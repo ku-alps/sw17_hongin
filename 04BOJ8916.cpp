@@ -56,9 +56,18 @@ public:
 public:
 	bool compare(Node *entry, Node *other) const{
 		cout << "comparing " << entry->data << " with " << other->data << endl;
-	
-		if (entry->left != NULL && other->left != NULL	
-		return compare(entry->left, other->left) && compare(entry->right, other->right);	
+
+		if (entry->data != other->data)
+			return false;
+
+		if (entry->left != NULL && other->left != NULL && entry->right != NULL && other->right != NULL)	
+			return compare(entry->left, other->left) && compare(entry->right, other->right);	
+		else if (entry->left != NULL && other->left != NULL && entry->right == NULL && other->right == NULL)	
+			return compare(entry->left, other->left);
+		else if (entry->left == NULL && other->left == NULL && entry->right != NULL && other->right != NULL)	
+			return compare(entry->right, other->right);
+		else if (entry->left == NULL && other->left == NULL && entry->right == NULL && other->right == NULL)	
+			return entry->data == other->data; // return true
 	}
 };
 
@@ -68,7 +77,7 @@ int FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(int *keys, int 
 		bst->insert(bst->root, keys[i]);
 		//cout << bst->search(bst->root, keys[i])->data << endl;
 	}
-	int temp[5]= {2, 1, 4, 3, 5};
+	int temp[5]= {2, 1, 3, 4, 5};
 	BinarySearchTree *bst2 = new BinarySearchTree();
 	for (int i = 0; i < keysize; i++) {
 		bst2->insert(bst2->root, temp[i]);
