@@ -53,54 +53,7 @@ public:
 			return entry;
 		}
 	}
-public:
-	bool compare(Node *entry, Node *other) const{
-		//cout << "comparing " << entry->data << " with " << other->data << endl;
-
-		if (entry->data != other->data)
-			return false;
-
-		if (entry->left != NULL && other->left != NULL && entry->right != NULL && other->right != NULL)	
-			return compare(entry->left, other->left) && compare(entry->right, other->right);	
-		else if (entry->left != NULL && other->left != NULL && entry->right == NULL && other->right == NULL)	
-			return compare(entry->left, other->left);
-		else if (entry->left == NULL && other->left == NULL && entry->right != NULL && other->right != NULL)	
-			return compare(entry->right, other->right);
-		else if (entry->left == NULL && other->left == NULL && entry->right == NULL && other->right == NULL)	
-			return entry->data == other->data; // return true
-	}
 };
-
-void Swap(int *array, int startind, int endind) {
-	int temp = array[startind];
-	array[startind] = array[endind];
-	array[endind] = temp;
-}
-
-void Permutate(int keys[], int swapind, int length, BinarySearchTree *bst, int *identical) {
-	if (swapind == length - 1){
-		/*BinarySearchTree *bst2 = new BinarySearchTree();
-		for (int i = 0; i < length; i++) {
-			bst2->insert(bst2->root, keys[i]);
-			//cout << bst->search(bst->root, keys[i])->data << endl;
-		}
-		if(bst->compare(bst->root, bst2->root))
-			(*identical)++;
-
-		delete bst2;*/
-		return;
-	}
-	
-	for (int i = 0; swapind + i < length ; i++) {
-		Swap(keys, swapind, swapind + i);
-		//cout << swapind << "-" << swapind + i << endl;
-		Permutate(keys, swapind + 1, length, bst, identical);
-		for (int j = 0 ; j < length; j++)
-			cout << keys[j] << ", ";
-		cout << endl;
-		Swap(keys, swapind, swapind + i);
-	}
-}
 
 void CountChildren(Node *root, int *howmany) {
 	(*howmany)++;
@@ -108,6 +61,13 @@ void CountChildren(Node *root, int *howmany) {
 		CountChildren(root->left, howmany);
 	if (root->right != NULL)
 		CountChildren(root->right, howmany);
+}
+
+int fact(int n) {
+   if (n == 0 || n == 1)
+      return 1;
+   else
+      return n * fact(n - 1);
 }
 
 void MultiplyCombinationOfLeftRightChildrenOnEachSubtree(Node *root, int *numberofcase) {
@@ -118,9 +78,8 @@ void MultiplyCombinationOfLeftRightChildrenOnEachSubtree(Node *root, int *number
 		CountChildren(root->right, &rightchildren);
 	if (leftchildren == 0 && rightchildren == 0)
 		return;
-	//cout << leftchildren << " " << root->data << " " << rightchildren << endl;
-	if (leftchildren != 0 && rightchildren != 0) {
-		int sum = leftchildren + rightchildren;
+//	if (leftchildren != 0 && rightchildren != 0) {
+/*		int sum = leftchildren + rightchildren;
 		int smaller = leftchildren > rightchildren ? rightchildren : leftchildren;
 		int bigger = leftchildren > rightchildren ? leftchildren : rightchildren;
 
@@ -133,9 +92,15 @@ void MultiplyCombinationOfLeftRightChildrenOnEachSubtree(Node *root, int *number
 			demnominator *= smaller - i;
 		
 		int coefficient = numerator / demnominator;	
-
-		(*numberofcase) *= coefficient;
-	}
+*/
+		//(*numberofcase) *= coefficient;
+//	}
+	int n = leftchildren + rightchildren;
+	int r = leftchildren;
+	int coefficient = fact(n) / (fact(r) * fact(n-r));
+	
+	//cout << leftchildren << " " << root->data << " " << rightchildren << " cof : " << coefficient << endl;
+	(*numberofcase) *= 	coefficient;
 	if (root->left != NULL)
 		MultiplyCombinationOfLeftRightChildrenOnEachSubtree(root->left, numberofcase);
 	if (root->right != NULL)
@@ -147,20 +112,7 @@ int FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(int *keys, int 
 		bst->insert(bst->root, keys[i]);
 		//cout << bst->search(bst->root, keys[i])->data << endl;
 	}
-	/* test
-	int temp[5]= {2, 1, 3, 4, 5};
-	BinarySearchTree *bst2 = new BinarySearchTree();
-	for (int i = 0; i < keysize; i++) {
-		bst2->insert(bst2->root, temp[i]);
-		//cout << bst->search(bst->root, keys[i])->data << endl;
-	}
-	if (bst->compare(bst->root, bst2->root))
-		cout << "bst is equal to bst2" << endl;
-
-	delete bst2;
-	*/
-	int identical = 1;/*, swapind = 0;
-	Permutate(keys, swapind, keysize, bst, &identical);*/
+	int identical = 1;
 	MultiplyCombinationOfLeftRightChildrenOnEachSubtree(bst->root, &identical);
 	delete bst;
 	
@@ -182,7 +134,7 @@ void CaseTest(){
 		delete[] keys;
 	}
 	for (int i = 0 ; i < cases; i++)
-		cout << answers[i] << endl;
+		cout << answers[i] % 9999991 << endl;
 	delete[] answers;
 }
 int main(){
