@@ -55,7 +55,7 @@ public:
 	}
 public:
 	bool compare(Node *entry, Node *other) const{
-		cout << "comparing " << entry->data << " with " << other->data << endl;
+		//cout << "comparing " << entry->data << " with " << other->data << endl;
 
 		if (entry->data != other->data)
 			return false;
@@ -71,12 +71,45 @@ public:
 	}
 };
 
+void Swap(int *array, int startind, int endind) {
+	int temp = array[startind];
+	array[startind] = array[endind];
+	array[endind] = temp;
+}
+
+void Permutate(int keys[], int swapind, int length, BinarySearchTree *bst, int *identical) {
+	if (swapind == length - 1){
+		/*BinarySearchTree *bst2 = new BinarySearchTree();
+		for (int i = 0; i < length; i++) {
+			bst2->insert(bst2->root, keys[i]);
+			//cout << bst->search(bst->root, keys[i])->data << endl;
+		}
+		if(bst->compare(bst->root, bst2->root))
+			(*identical)++;
+
+		delete bst2;*/
+		return;
+	}
+	
+	for (int i = 0; swapind + i < length ; i++) {
+		Swap(keys, swapind, swapind + i);
+		//cout << swapind << "-" << swapind + i << endl;
+		Permutate(keys, swapind + 1, length, bst, identical);
+		for (int j = 0 ; j < length; j++)
+			cout << keys[j] << ", ";
+		cout << endl;
+		Swap(keys, swapind, swapind + i);
+	}
+}
+
+
 int FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(int *keys, int keysize) {
 	BinarySearchTree *bst = new BinarySearchTree();
 	for (int i = 0; i < keysize; i++) {
 		bst->insert(bst->root, keys[i]);
 		//cout << bst->search(bst->root, keys[i])->data << endl;
 	}
+	/* test
 	int temp[5]= {2, 1, 3, 4, 5};
 	BinarySearchTree *bst2 = new BinarySearchTree();
 	for (int i = 0; i < keysize; i++) {
@@ -85,8 +118,14 @@ int FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(int *keys, int 
 	}
 	if (bst->compare(bst->root, bst2->root))
 		cout << "bst is equal to bst2" << endl;
+
+	delete bst2;
+	*/
+	int identical = 0, swapind = 0;
+	Permutate(keys, swapind, keysize, bst, &identical);
 	delete bst;
-	return 0;
+	
+	return identical;
 }
 
 void CaseTest(){
@@ -100,6 +139,7 @@ void CaseTest(){
 		for (int j = 0 ; j < keysize; j++){
 			cin >> keys[j];
 		}
+		cout << "call finder" << endl;
 		answers[i] = FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(keys, keysize);
 		delete[] keys;
 	}
@@ -108,8 +148,11 @@ void CaseTest(){
 	delete[] answers;
 }
 int main(){
+	int keys[3] =  {1, 2,3};
+	//int keys[5]= {2, 1, 4, 3, 5};
+	//int keys[4]= {2, 4, 1, 3};
+	//int keys[12]= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+	cout << FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(keys, 3);
 	//CaseTest();
-	int keys[5]= {2, 1, 4, 3, 5};
-	FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(keys, 5);
 	return 0;
 }
