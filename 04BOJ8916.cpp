@@ -102,7 +102,45 @@ void Permutate(int keys[], int swapind, int length, BinarySearchTree *bst, int *
 	}
 }
 
+void CountChildren(Node *root, int *howmany) {
+	(*howmany)++;
+	if (root->left != NULL)
+		CountChildren(root->left, howmany);
+	if (root->right != NULL)
+		CountChildren(root->right, howmany);
+}
 
+void MultiplyCombinationOfLeftRightChildrenOnEachSubtree(Node *root, int *numberofcase) {
+	int leftchildren = 0, rightchildren = 0;
+	if (root->left != NULL)
+		CountChildren(root->left, &leftchildren);
+	if (root->right != NULL)
+		CountChildren(root->right, &rightchildren);
+	if (leftchildren == 0 && rightchildren == 0)
+		return;
+	//cout << leftchildren << " " << root->data << " " << rightchildren << endl;
+	if (leftchildren != 0 && rightchildren != 0) {
+		int sum = leftchildren + rightchildren;
+		int smaller = leftchildren > rightchildren ? rightchildren : leftchildren;
+		int bigger = leftchildren > rightchildren ? leftchildren : rightchildren;
+
+		int numerator = sum;
+		for (int i = 1 ; sum - i > bigger; i++)
+			numerator *= sum - i;
+	
+		int demnominator = smaller;
+		for (int i = 1; smaller - i > 0; i++)
+			demnominator *= smaller - i;
+		
+		int coefficient = numerator / demnominator;	
+
+		(*numberofcase) *= coefficient;
+	}
+	if (root->left != NULL)
+		MultiplyCombinationOfLeftRightChildrenOnEachSubtree(root->left, numberofcase);
+	if (root->right != NULL)
+		MultiplyCombinationOfLeftRightChildrenOnEachSubtree(root->right, numberofcase);
+}	
 int FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(int *keys, int keysize) {
 	BinarySearchTree *bst = new BinarySearchTree();
 	for (int i = 0; i < keysize; i++) {
@@ -121,13 +159,14 @@ int FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(int *keys, int 
 
 	delete bst2;
 	*/
-	int identical = 0, swapind = 0;
-	Permutate(keys, swapind, keysize, bst, &identical);
+	int identical = 1;/*, swapind = 0;
+	Permutate(keys, swapind, keysize, bst, &identical);*/
+	MultiplyCombinationOfLeftRightChildrenOnEachSubtree(bst->root, &identical);
 	delete bst;
 	
 	return identical;
 }
-
+	
 void CaseTest(){
 	int cases, *answers;
 	cin >> cases;
@@ -139,7 +178,6 @@ void CaseTest(){
 		for (int j = 0 ; j < keysize; j++){
 			cin >> keys[j];
 		}
-		cout << "call finder" << endl;
 		answers[i] = FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(keys, keysize);
 		delete[] keys;
 	}
@@ -148,11 +186,14 @@ void CaseTest(){
 	delete[] answers;
 }
 int main(){
-	int keys[3] =  {1, 2,3};
+	//int keys[3] =  {2,1,3};
 	//int keys[5]= {2, 1, 4, 3, 5};
 	//int keys[4]= {2, 4, 1, 3};
 	//int keys[12]= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-	cout << FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(keys, 3);
-	//CaseTest();
+	//int keys[9]= {1, 2, 3, 4, 5, 6, 7, 8, 9};
+	//int keys[10]= {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	//cout << FindTheNumberOfPermutationProducingIdenticalBinarySearchTree(keys, 10);
+	
+	CaseTest();
 	return 0;
 }
