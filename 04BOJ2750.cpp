@@ -4,52 +4,31 @@ void swap(int *arr, int i, int j){
 	int t = arr[i];
 	arr[i] = arr[j];
 	arr[j] = t;
-//	cout << "swap : " << arr[j] << arr[i] << endl;
 }
 
 int split(int *arr, int first, int last, int init){
+	int i;
 	// send initial pivot to the end of array
-//	cout << "Split "	;
 	swap(arr, init, last);
-	int left = first - 1, right = last, pivot = last;
-//	cout  << left << right << pivot << endl;
-//	for (int i = first ; i <=last; i++) 
-//		cout << arr[i];
-//	cout << endl;
-//	cin >> arr[pivot];	
-	while (left + 1 != right) {
-		while (arr[left+1] < arr[pivot]){
+	int left = first, right = last - 1, pivot = last;
+	while (left <= right) {
+		while (arr[left] < arr[pivot] && left <= last)
 			left++;
-//			cout << "left : " << arr[left] << endl;
-		}
-//		cin >> left;
-		while (arr[right-1] > arr[pivot]){
+		while (arr[right] > arr[pivot] && right >= 0)
 			right--;
-//			cout << "right : " << arr[right] << endl;
-		}
-		if (left + 1 == right)
-			break;
-		swap(arr, left + 1, right - 1);
-//		for (int i = first ; i <= last; i++) 
-//			cout << arr[i];
-//		cout << endl;
-//		cout << "pivot : " << arr[pivot];
-//		cin >> arr[pivot] ;
+		if (left <= right)
+			swap(arr, left, right);
 	}
 	// swap pivot into correct spot
-//	cout << "last swap" <<endl;
-	swap(arr, right, pivot);
-//	for (int i = first ; i <= last; i++) 
-//		cout << arr[i];
-//	cout << endl;
-	return right;
+	swap(arr, left, pivot);
+	return left;
 }
 void quicksort(int *arr, int first, int last) {
+	if (first >= last)
+		return;
 	int pivot = split(arr, first, last, last);
-	if (first < pivot - 1)
-		quicksort(arr, first, pivot - 1);
-	if (pivot + 1< last)
-		quicksort(arr, pivot + 1, last);
+	quicksort(arr, first, pivot - 1);
+	quicksort(arr, pivot + 1, last);
 }
 void casetest(){
 	int cases = 8;
@@ -57,10 +36,9 @@ void casetest(){
 	int *arr = new int[cases];
 	for (int i = 0 ; i < cases; i++) 
 		cin >> arr[i];
-	//int arr[] = {1, 5, 6, 8, 7, 2, 4, 3};
 	quicksort(arr, 0, cases - 1);
 	for (int i = 0 ; i < cases; i++) 
-		cout << arr[i];
+		cout << arr[i] << endl;
 	delete[] arr;
 }
 int main(){
