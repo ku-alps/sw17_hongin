@@ -18,7 +18,9 @@ int merge(int *array, int start, int mid, int end){
 
 	for (index = start; index<= end; index++)
 		array[index] = temp[index - start];	
+	return 0;
 }
+
 void sort(int *array, int start, int end) {
 	if (start >= end)
 		return;	
