@@ -22,17 +22,19 @@ int main()
 		bool lamping = false;
 		for (int j = 0; j < N; j++) {
 			if (diff[j] == 0) {
-				cnt++
+				cnt++;
 				if (lamping) {
 					diff[j] = -1;
-					if (cnt == L)
+					if (cnt == L){
 						lamping = false;
+						cnt = 1;
+					}
 				}
 			} else if (diff[j] == 1) {
 				if (cnt < L)
 					continue;
 				cnt = 1, lamp = 0;
-			    int	k = j-1;
+			    /*int	k = j-1;
 				while(k >= 0 && lamp != L){
 					if(diff[k] == 0){
 						lamp++;
@@ -41,7 +43,7 @@ int main()
 						break;	
 				}
 				if (lamp < L)
-					continue;	
+					continue;	*/
 			} else if (diff[j] == -1) {
 				if (!lamping) {
 					cnt = 1;
@@ -49,9 +51,12 @@ int main()
 					lamping = true;
 				} else 
 					continue;
-			}
-			if (j == N-1 && lamping == false)
+			} else 
+				continue;
+			if (j == N-1 && lamping == false) {
 				answer++;
+				cout << i << "!" << endl;
+			}
 		}
 	}
 	cout << answer;
