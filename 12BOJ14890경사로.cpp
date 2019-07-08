@@ -18,7 +18,7 @@ int main()
 		for (int j = 1; j < N; j++)
 			diff[j] = arr[i][j] - arr[i][j-1];
 		
-		int cnt = 1, lamp = 0;
+		int cnt = 0;
 		bool lamping = false;
 		for (int j = 0; j < N; j++) {
 			if (diff[j] == 0) {
@@ -31,28 +31,18 @@ int main()
 					}
 				}
 			} else if (diff[j] == 1) {
-				if (cnt < L)
-					continue;
-				cnt = 1, lamp = 0;
-			    /*int	k = j-1;
-				while(k >= 0 && lamp != L){
-					if(diff[k] == 0){
-						lamp++;
-						k--;
-					} else
-						break;	
-				}
-				if (lamp < L)
-					continue;	*/
+				if (cnt == L+1)
+					break;
+				cnt = 1;
 			} else if (diff[j] == -1) {
 				if (!lamping) {
 					cnt = 1;
 					diff[j] = -1;
 					lamping = true;
 				} else 
-					continue;
+					break;
 			} else 
-				continue;
+				break;
 			if (j == N-1 && lamping == false) {
 				answer++;
 				cout << i << "!" << endl;
