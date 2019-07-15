@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 void clockwise(int *arr) {
@@ -26,17 +27,42 @@ void anticlock(int *arr) {
 	arr[7] = temp; 
 }
 
+void chain_rotate(int arr[][8], int i, int dir) {
+	cout << "Visiting " << i << endl;
+	if (i == -1 || i == 4)
+		return;
+
+	if (dir == 1)
+		clockwise(arr[i]);
+	else if (dir == -1)
+		anticlock(arr[i]);
+
+	
+	if (arr[i][2] != arr[i+1][6])
+		chain_rotate(arr, i+1, (-1)*dir); 
+	if (arr[i-1][6] != arr[i][2])
+		chain_rotate(arr, i-1, (-1)*dir); 
+}
+
 int main() {
-	int arr[4][8];
+	int arr[4][8], K, gear, direction;
+	string temp;
 	for (int i = 0; i < 4; i++){
-		string temp;
 		cin >> temp;
 		for (int j = 0 ; j < 8; j++) {
-			arr[i][j] = stoi(temp[j], );
-			cout << arr[i][j] ;
+			arr[i][j] = (int)(temp[j] - '0');
 		}	
-		cout << endl;
 	}
-	
+
+	cin >> K;
+	for (int k = 0; k < K; k++) {
+		cin >> gear >> direction;
+		chain_rotate(arr, gear - 1, direction);
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0 ; j < 8; j++)
+				cout << arr[i][j] ;
+			cout << endl ;
+		}
+	}
 	return 0;
 }
