@@ -20,7 +20,6 @@ void print_ans() {
 	}
 }
 
-
 void bfs_clear(){
 	for (int i = 0 ; i < N ; i++)
 		queue[i] = 0;
@@ -31,28 +30,30 @@ void bfs_clear(){
 }
 
 void bfs_row(int index) {
-	cout << "Trying index : " << index << endl;	
+//	cout << "Trying index : " << index << endl;	
 	bfs_clear();
 	queue[t++] = index;
 	
 	while(c < t) {
 		// pop
 		int cur = queue[c++];
-		cout << "Poping out of queue : " << cur << endl;
-		ans[index][cur] = 1;
-		visited[cur] = 1;
+//		cout << "Poping out of queue : " << cur << endl;
+		if(t!=1){
+			ans[index][cur] = 1;
+			visited[cur] = 1;
+		}
 			
 		// pushing
 		for (int i = 0 ; i < N; i++){
 			if (arr[cur][i] == 1) {
 				if (visited[i] == 0){
-					cout << "Pushing into queue : " << i << endl;
+//					cout << "Pushing into queue : " << i << endl;
 					queue[t++] = i;
 				}
 			}
 		}
 	}
-	print_ans();
+	//print_ans();
 }
 
 int main(){
