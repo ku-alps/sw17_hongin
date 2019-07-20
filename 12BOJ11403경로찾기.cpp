@@ -64,9 +64,8 @@ int main(){
 
 	init_ans();
 
-	for (int i = 0 ; i < N ; i++) {
+	for (int i = 0 ; i < N ; i++)
 		bfs_row(i);
-	}
 
 	print_ans();
 
