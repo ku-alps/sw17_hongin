@@ -1,6 +1,6 @@
 #include <iostream>
 #include <queue>
-#include <string>
+#include <cstring>
 #define LEFT 0
 #define RIGHT 1
 #define UP 2
@@ -11,14 +11,14 @@ int N, M;
 
 class Flip {
 public:
-    char arr[10][10];
+    char arr[10][10], pR, pB;
     int visited[10][10];
     int dir;
     int dpt;
     int rR, cR;
     int rB, cB;
     
-    Flip(char map[][10], int vis[][10] , int di, int dp, int Rr, int Cr, int Rb, int Cb){
+    Flip(char map[][10], int vis[][10] , int di, int dp, int Rr, int Cr, int Rb, int Cb, char Pr, char Pb){
         for (int i = 0 ; i < N; i++){
             for (int j = 0 ; j < M ; j++){
                 arr[i][j] = map[i][j];
@@ -29,17 +29,18 @@ public:
         dpt = dp;
         rR = Rr; cR = Cr;
         rB = Rb; cB = Cb;
+        pR = Pr; pB = Pb;
     }
 
     void print(){
        for (int i = 0 ; i < N ; i++) {
            for (int j = 0 ; j < M ; j++)
-               printf("%c", arr[i][j]);
+               cout << arr[i][j];
            cout << endl;
        }
        for (int i = 0 ; i < N ; i++) {
            for (int j = 0 ; j < M ; j++)
-               printf("%i", visited[i][j]);
+               cout << visited[i][j];
            cout << endl;
        }
        cout << endl;
@@ -59,23 +60,38 @@ public:
     }
 
     bool move(int r, int c, int dir, bool red) {
-        bool hole = false;
-        char ch = arr[r][c];
+        char ch = arr[r][c]; // character 'R' or 'B'
+        
+        if (red) // restore map
+            arr[r][c] = pR;
+        else
+            arr[r][c] = pB;
+        
         int dr = 0, dc = 0;
         if (dir == LEFT) { dc = -1; }
         else if (dir == RIGHT) { dc = 1; }
         else if (dir == UP) { dr = -1; }
         else if (dir == DOWN) { dr = 1; }
+        
+        bool hole = false;
+       
         while (dc!=0||dr!=0){
-           if (arr[r][c] != 'O') arr[r][c] = '.';
-           if (red) visited[r][c] = 1;
-           if (arr[r][c]=='O') hole = true;
-           if (arr[r + dr][c + dc] == '.'|| arr[r + dr][c + dc] == 'O'){
-               r += dr; c += dc;
-           } else {
-               arr[r][c] = ch; break;
-           }
+            if (red)
+                visited[r][c] = 1;
+            if (arr[r][c]=='O')
+                hole = true;
+            if (arr[r + dr][c + dc] == '.'|| arr[r + dr][c + dc] == 'O'){
+                r += dr; c += dc;
+            } else {
+                if (red)
+                    pR = arr[r][c];
+                else
+                    pB = arr[r][c];
+                break;
+            }
         }
+        
+        arr[r][c] = ch;
         if (red){
             rR = r; cR = c;
         } else {
@@ -100,7 +116,7 @@ public:
             redout = move(rR, cR, dir, true);
         }
 
-        print();
+        //print();
         if (redout && !bluout)
             return true;
         return false;
@@ -137,7 +153,7 @@ int main(){
     }
     
     vis[rR][cR] = 1;
-    Flip init(map, vis, -1, 0, rR, cR, rB, cB);
+    Flip init(map, vis, -1, 0, rR, cR, rB, cB, '.', '.');
 //    init.move_all(LEFT);
 //    init.move_all(DOWN);
 //    init.move_all(RIGHT);
@@ -162,23 +178,23 @@ int main(){
 
         if (dirs[LEFT]) {
             flip.visited[flip.rR][flip.cR-1] = 1;
-            Flip temp(flip.arr, flip.visited, LEFT, flip.dpt+1, flip.rR, flip.cR, flip.rB, flip.cB);
+            Flip temp(flip.arr, flip.visited, LEFT, flip.dpt+1, flip.rR, flip.cR, flip.rB, flip.cB, flip.pR, flip.pB);
             q.push(temp);
         }
         if (dirs[RIGHT]){
             flip.visited[flip.rR][flip.cR+1] = 1;
-            Flip temp(flip.arr, flip.visited, RIGHT, flip.dpt+1, flip.rR, flip.cR, flip.rB, flip.cB);
+            Flip temp(flip.arr, flip.visited, RIGHT, flip.dpt+1, flip.rR, flip.cR, flip.rB, flip.cB, flip.pR, flip.pB);
             q.push(temp);
         }
         if (dirs[UP]) {
             flip.visited[flip.rR-1][flip.cR] = 1;
-            Flip temp(flip.arr, flip.visited, UP, flip.dpt+1, flip.rR, flip.cR, flip.rB, flip.cB);
+            Flip temp(flip.arr, flip.visited, UP, flip.dpt+1, flip.rR, flip.cR, flip.rB, flip.cB, flip.pR, flip.pB);
             q.push(temp);
         }
         if (dirs[DOWN]){
-            Flip temp(flip.arr, flip.visited, DOWN, flip.dpt+1, flip.rR, flip.cR, flip.rB, flip.cB);
-            q.push(temp);
             flip.visited[flip.rR+1][flip.cR] = 1;
+            Flip temp(flip.arr, flip.visited, DOWN, flip.dpt+1, flip.rR, flip.cR, flip.rB, flip.cB, flip.pR, flip.pB);
+            q.push(temp);
         }
     }
 
