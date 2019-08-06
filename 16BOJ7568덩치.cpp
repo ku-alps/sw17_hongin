@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #define W 0
 #define H 1
 #define loop(i, n) for (int i = 0; i < n; ++i)
@@ -9,9 +8,6 @@ using namespace std;
 int N;
 int arr[200][2];
 int cnt[200] = { 0, };
-int ans[200] = { 0, };
-int lut[200] = { 0, };
-vector<int> v[200];
 
 int main(){
     
