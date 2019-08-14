@@ -28,7 +28,7 @@ int connected_component() {
             }
             if (find(group[d].begin(), group[d].end(),g[r][c-1])==group[d].end()){
               group[d].push_back(g[r-1][c]);
-              duplicate++;
+              duplicate++;;
             }
           }
           g[r][c] = g[r-1][c];
