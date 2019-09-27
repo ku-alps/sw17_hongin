@@ -29,7 +29,7 @@ void dfs(int N, int depth) {
   while(true) {
     if (find(begin(broken), end(broken), up) != end(broken)){
       approximate = up; 
-      break;
+      break;;
     }
     if (find(begin(broken), end(broken), down) != end(broken)){
       approximate = down; 
