@@ -84,7 +84,7 @@ void get_distance_matrix() {
 
   during(0, i, I) {
     vector<pair<int, int> > island = islands.at(i);
-    //cout << "island : " << i << endl;
+    cout << endl << "island : " << i << endl;
     during(0, p, island.size()) {
       pair<int, int> point = island.at(p);
       //cout << "Point : " << point.first << ", " << point.second << " : ";
@@ -95,6 +95,7 @@ void get_distance_matrix() {
             if (d==0) break;
 
             pair<int, int> extend = make_pair(r+dr[x], c+dc[x]);
+            if (find(island.begin(), island.end(), extend) != island.end()) break;
             during(0, ii, I) {
               if (i == ii) continue;
               //cout << " : Matching " << ii; 
@@ -102,7 +103,7 @@ void get_distance_matrix() {
               if(d < D[i][ii] && find(target.begin(), target.end(), extend) != target.end()) {
                   D[i][ii] = d;
                   D[ii][i] = d;
-                  //cout << "Found : " << i << " to " << ii << " : " << point.first << ", " << point.second << " : " << extend.first << ", " << extend.second << " d : " << d << "\n";
+                  cout << "Found : " << i << " to " << ii << " : " << point.first << ", " << point.second << " : " << extend.first << ", " << extend.second << " d : " << d << "\n";
               }
             }
           }
@@ -114,7 +115,7 @@ void get_distance_matrix() {
         }
         //cout << "(" << r << ", " << c << ", "<< d <<"), ";
         
-        if (d == 0) continue; 
+        if (d == 0 || d == 1) continue; 
 
       }
       //cout << endl;
@@ -131,7 +132,7 @@ void print_distance_matrix() {
   }
 }
 
-void prim() {
+int prim() {
   bool T[6] = {false, };
   T[0] = 1;
   //cout << "0 ";
@@ -156,11 +157,22 @@ void prim() {
       }
     }
     
-    ans += min;
-    T[min_idx] = true;
+    if (min != INT_MAX){
+      ans += min;
+      T[min_idx] = true;
+    } else{ 
+      return -1;
+    }
+
     //cout << min_idx << "(" <<min << ") ";
   }
-  cout << ans << endl;
+  if (ans == 0) 
+    return -1;
+  else {
+    for (int i = 0 ; i < I; i++)
+      if (!T[i]) return -1;
+    return ans;
+  }
 }
 
 int main() {
@@ -173,6 +185,6 @@ int main() {
   //print_island();
   get_distance_matrix();
   //print_distance_matrix();
-  prim();
+  cout << prim() << endl;
   return 0;
 }
