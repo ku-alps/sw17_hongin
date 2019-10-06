@@ -22,7 +22,7 @@ void unite(int x, int y) {
 }
 
 int n, m, q;
-vector<pair<int64_t, pair<int64_t, int64_t> > > g(m + 1);
+vector<pair<int64_t, pair<int64_t, int64_t> > > g;
 
 bool kruskal(vector<int>edges) {
   for (int i = 0; i <= 100001; i++) 
@@ -62,9 +62,10 @@ int main() {
   ios::sync_with_stdio(false);
   cin >> n >> m;
 
+  g[0] = make_pair(0, make_pair(0, 0));
   for (int i = 1; i <= m; i++){
     int u, v, w; cin >> u >> v >> w;
-    g[i] = std::make_pair(w, std::make_pair(u, v));
+    g[i] = make_pair(w, make_pair(u, v));
   }
   
   sort(g.begin(), g.end());
